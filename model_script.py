@@ -42,47 +42,35 @@ def build_data(df):
 
 UNITS_VALUE = 64
 
-
 def gru_model(shape_1, shape_2):
     model = keras.Sequential([
-        keras.layers.GRU(units=UNITS_VALUE, return_sequences=True, input_shape=(shape_1, shape_2)),
-        keras.layers.GRU(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.GRU(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.GRU(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.GRU(units=UNITS_VALUE, return_sequences=False),
-        keras.layers.Dropout(0.2),
+        keras.layers.GRU(units=units_value, return_sequences=True, input_shape=(shape_1, shape_2)),
+        keras.layers.GRU(units=units_value, return_sequences=False),
+        keras.layers.Dropout(0.3),
         keras.layers.Dense(1)
     ])
 
     model.compile(optimizer='adam',
                   loss='mean_squared_error')
     return model
-
 
 def rnn_model(shape_1, shape_2):
     model = keras.Sequential([
-        keras.layers.SimpleRNN(units=UNITS_VALUE, return_sequences=True, input_shape=(shape_1, shape_2)),
-        keras.layers.SimpleRNN(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.SimpleRNN(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.SimpleRNN(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.SimpleRNN(units=UNITS_VALUE, return_sequences=False),
-        keras.layers.Dropout(0.2),
+        keras.layers.SimpleRNN(units=units_value,return_sequences=True, input_shape=(shape_1, shape_2)),
+        keras.layers.SimpleRNN(units=units_value, return_sequences=False),
+        keras.layers.Dropout(0.3),
         keras.layers.Dense(1)
     ])
 
     model.compile(optimizer='adam',
                   loss='mean_squared_error')
     return model
-
 
 def lstm_model(shape_1, shape_2):
     model = keras.Sequential([
-        keras.layers.LSTM(units=UNITS_VALUE, return_sequences=True, input_shape=(shape_1, shape_2)),
-        keras.layers.LSTM(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.LSTM(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.LSTM(units=UNITS_VALUE, return_sequences=True),
-        keras.layers.LSTM(units=UNITS_VALUE, return_sequences=False),
-        keras.layers.Dropout(0.2),
+        keras.layers.LSTM(units=units_value,return_sequences=True, input_shape=(shape_1, shape_2)),
+        keras.layers.LSTM(units=units_value, return_sequences=False),
+        keras.layers.Dropout(0.3),
         keras.layers.Dense(1)
     ])
 
@@ -90,19 +78,18 @@ def lstm_model(shape_1, shape_2):
                   loss='mean_squared_error')
     return model
 
-
 def train_model(model, X_train, y_train, X_val, y_val):
-    BATCH_SIZE = 32
-    EPOCHS = 200
+    BATCH_SIZE=32
+    EPOCHS=300
 
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                      patience=30,
+                                                      patience=10,
                                                       mode='min')
     model.fit(X_train,
               y_train,
               batch_size=BATCH_SIZE,
               epochs=EPOCHS,
-              callbacks=[early_stopping],
+              callbacks = [early_stopping],
               validation_data=(X_val, y_val),
               verbose=0)
     return model
